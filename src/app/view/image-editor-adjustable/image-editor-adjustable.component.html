@@ -1,0 +1,24 @@
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">TechXConf Attending </a>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <!-- <div class="col-md-3">    
+      </div> -->
+        <div class="col-md-6">
+            <div class="image-container">
+                <input class="btn btn-primary" type="file" (change)="onFileSelected($event)" accept="image/*" />
+           <canvas #canvas></canvas>
+              </div>
+              <button class="btn btn-success" (click)="downloadImage()">Download Image</button>
+        </div>
+        <!-- <div class="col-md-3">    
+        </div> -->
+
+    </div>
+  </div>
+
