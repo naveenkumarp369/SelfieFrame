@@ -21,4 +21,63 @@
     width: 100%;
     margin-bottom: 20px;
   }
-  
+  .background{
+    // background-image: 'techbackground1.jpg';
+    // background-image: url(/assets/techbackground1.jpg) left no-repeat;
+    width: 100%;
+    height: 100%;
+
+    // background-color: blanchedalmond;
+
+  }
+
+  .upload-files {
+    text-align: center;
+    border-radius: 0.438em;
+    border: 2px dashed #3483e29c;
+    background-color: #f2f6ffad!important;
+    padding: 0.625em 1.25em;
+    opacity: 1 !important;
+    margin-bottom: 1.25em;
+    .pdf-img {
+      background: url(/assets/filecloudupload.svg) center
+        center no-repeat;
+      background-size: contain;
+      width: 10em;
+      height: 9em;
+      margin-left: 5em;
+      margin-top: 1em;
+    }
+    .browse-file {
+      // background-color: $white;
+      display: flex;
+      // padding: 0.625em 0.875em 0;
+      color: #3483e2;
+      cursor: pointer;
+    }
+    .upload-img {
+      background: url(/assets/upload_cloud.svg) left no-repeat;
+      background-size: contain;
+      width: 2.5em;
+      height: 2.5em;
+      margin-right: 10px;
+      margin-top: -10px;
+    }
+    .drag-file {
+      margin-top: 30px;
+      font-family:"poppins";
+    }
+    .span-weight-top {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .span-weight-bottom {
+      font-weight: bold;
+    }
+
+    .browse-span {
+      display: flex;
+      margin-left: 15px;
+      margin-top: 8px;
+    }
+  }

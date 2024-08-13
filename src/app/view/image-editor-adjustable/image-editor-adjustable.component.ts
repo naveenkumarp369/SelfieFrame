@@ -26,7 +26,18 @@ export class ImageEditorAdjustableComponent {
   private lastTouchY = 0;
   private moveThreshold = 5; // Reduced threshold for smoother dragging
 
+
+private readonly minScale = 1.3;  
+
+   isImageUploaded = false;
+   displayCanvas="none";
   ngOnInit() {
+   this.loadcanvas();
+  }
+
+
+  loadcanvas()
+  {
     this.templateImage.src = 'assets/board2.png';
     this.templateImage.onload = () => {
       this.canvas.nativeElement.width = this.templateImage.width;
@@ -46,19 +57,24 @@ export class ImageEditorAdjustableComponent {
   }
 
   onFileSelected(event: any) {
-    
+ 
     this.service.open(event.target.files[0], {
       aspectRatio: 4 / 3,
       autoCropArea: 1
     }).subscribe((croppedEvent: NgxCroppedEvent) => {
       const croppedImageDataUrl = croppedEvent.base64; // Assuming you have base64 data
-  
+      this.displayCanvas="block";
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
+        
         this.uploadedImage.src = e.target.result;
         this.uploadedImage.onload = () => {
           this.drawImages();
         };
+
+        this.isImageUploaded=true;
+
       };
   
       // Convert base64 to Blob if needed
@@ -145,10 +161,17 @@ export class ImageEditorAdjustableComponent {
     this.dragging = false;
   }
 
+  // onMouseWheel(event: WheelEvent) {
+  //   event.preventDefault();  // Prevent page scrolling on scale
+  //   const scaleChange = event.deltaY > 0 ? -0.1 : 0.1;
+  //   this.imageScale = Math.max(0.1, this.imageScale + scaleChange);
+  //   this.drawImages();
+  // }
+
   onMouseWheel(event: WheelEvent) {
     event.preventDefault();  // Prevent page scrolling on scale
     const scaleChange = event.deltaY > 0 ? -0.1 : 0.1;
-    this.imageScale = Math.max(0.1, this.imageScale + scaleChange);
+    this.imageScale = Math.max(this.minScale, this.imageScale + scaleChange);  // Ensure scale doesn't go below minScale
     this.drawImages();
   }
 
@@ -159,10 +182,8 @@ export class ImageEditorAdjustableComponent {
       const touch = event.touches[0];
       const mouseX = touch.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
       const mouseY = touch.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
-
       const scaledWidth = 350 * this.imageScale;
       const scaledHeight = 350 * this.imageScale;
-
       if (mouseX >= this.imageX && mouseX <= this.imageX + scaledWidth &&
           mouseY >= this.imageY && mouseY <= this.imageY + scaledHeight) {
         this.dragging = true;
@@ -177,28 +198,52 @@ export class ImageEditorAdjustableComponent {
     }
   }
 
+  // onTouchMove(event: TouchEvent) {
+  //   event.preventDefault();  // Prevent default behavior
+
+  //   if (event.touches.length === 1 && this.dragging) {
+  //     const touch = event.touches[0];
+  //     const mouseX = touch.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
+  //     const mouseY = touch.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
+
+  //     this.imageX = mouseX - this.offsetX;
+  //     this.imageY = mouseY - this.offsetY;
+  //     this.drawImages();
+  //   }
+
+  //   if (event.touches.length === 2) {
+  //     const newDistance = this.getTouchDistance(event.touches);
+  //     const scaleChange = newDistance / this.initialDistance;
+  //     this.imageScale *= scaleChange;
+  //     this.imageScale = Math.max(0.1, this.imageScale);
+  //     this.initialDistance = newDistance;
+  //     this.drawImages();
+  //   }
+  // }
+
+
   onTouchMove(event: TouchEvent) {
     event.preventDefault();  // Prevent default behavior
-
+  
     if (event.touches.length === 1 && this.dragging) {
       const touch = event.touches[0];
       const mouseX = touch.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
       const mouseY = touch.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
-
+  
       this.imageX = mouseX - this.offsetX;
       this.imageY = mouseY - this.offsetY;
       this.drawImages();
     }
-
+  
     if (event.touches.length === 2) {
       const newDistance = this.getTouchDistance(event.touches);
       const scaleChange = newDistance / this.initialDistance;
-      this.imageScale *= scaleChange;
-      this.imageScale = Math.max(0.1, this.imageScale);
+      this.imageScale = Math.max(this.minScale, this.imageScale * scaleChange);  // Ensure scale doesn't go below minScale
       this.initialDistance = newDistance;
       this.drawImages();
     }
   }
+
 
   endTouch() {
     this.dragging = false;
