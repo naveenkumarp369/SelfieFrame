@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { NgxCroppedEvent, NgxPhotoEditorService } from 'ngx-photo-editor';
 
 @Component({
   selector: 'app-image-editor-adjustable',
@@ -7,6 +8,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 })
 export class ImageEditorAdjustableComponent {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+  constructor(private service: NgxPhotoEditorService) {}
 
   private ctx!: CanvasRenderingContext2D;
   private templateImage = new Image();
@@ -44,8 +46,13 @@ export class ImageEditorAdjustableComponent {
   }
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
+    
+    this.service.open(event.target.files[0], {
+      aspectRatio: 4 / 3,
+      autoCropArea: 1
+    }).subscribe((croppedEvent: NgxCroppedEvent) => {
+      const croppedImageDataUrl = croppedEvent.base64; // Assuming you have base64 data
+  
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.uploadedImage.src = e.target.result;
@@ -53,8 +60,50 @@ export class ImageEditorAdjustableComponent {
           this.drawImages();
         };
       };
-      reader.readAsDataURL(file);
+  
+      // Convert base64 to Blob if needed
+      const blob = this.dataURLToBlob(croppedImageDataUrl);
+      reader.readAsDataURL(blob); // You can now use the Blob as expected
+    });
+
+
+    // const file = event.target.files[0];
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onload = (e: any) => {
+    //     this.uploadedImage.src = e.target.result;
+    //     this.uploadedImage.onload = () => {
+    //       this.drawImages();
+    //     };
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+  }
+
+  dataURLToBlob(dataURL:any): Blob {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
     }
+    return new Blob([ab], { type: mimeString });
+  }
+
+
+  removeImage()
+  {
+    
+  }
+
+  fileChangeHandler($event: any) {
+    this.service.open($event, {
+      aspectRatio: 4 / 3,
+      autoCropArea: 1
+    }).subscribe(data => {
+      // this.output = data;
+    });
   }
 
   drawImages() {

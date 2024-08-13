@@ -12,9 +12,14 @@
         <div class="col-md-6">
             <div class="image-container">
                 <input class="btn btn-primary" type="file" (change)="onFileSelected($event)" accept="image/*" />
+                <!-- <div>&nbsp;</div> -->
+
+                <button class="btn btn-danger" (click)="downloadImage()"> Delete Image </button>
+
+                <div>&nbsp;</div>
            <canvas #canvas></canvas>
               </div>
-              <button class="btn btn-success" (click)="downloadImage()">Download Image</button>
+              <button class="btn btn-success" (click)="downloadImage()"> Download Image </button>
         </div>
         <!-- <div class="col-md-3">    
         </div> -->
@@ -22,3 +27,5 @@
     </div>
   </div>
 
+  <!-- <input type="file" (change)="fileChangeHandler($event)"> -->
+  <!-- <img [src]="output?.base64" alt=""> -->
