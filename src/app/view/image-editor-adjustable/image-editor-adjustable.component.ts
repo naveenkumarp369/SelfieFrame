@@ -14,8 +14,8 @@ export class ImageEditorAdjustableComponent {
   private templateImage = new Image();
   private uploadedImage = new Image();
 
-  private imageX = 545;
-  private imageY = 190;
+  private imageX = 540;
+  private imageY = 180;
   private dragging = false;
   private offsetX = 0;
   private offsetY = 0;
@@ -27,7 +27,7 @@ export class ImageEditorAdjustableComponent {
   private moveThreshold = 5; // Reduced threshold for smoother dragging
 
 
-private readonly minScale = 0;  
+private readonly minScale = 1.2;  
 
    isImageUploaded = false;
    displayCanvas="none";
@@ -46,8 +46,8 @@ private readonly minScale = 0;
       this.drawTemplate();
     };
 
-    this.canvas.nativeElement.addEventListener('mousedown', this.startDrag.bind(this));
-    this.canvas.nativeElement.addEventListener('mousemove', this.onDrag.bind(this));
+    // this.canvas.nativeElement.addEventListener('mousedown', this.startDrag.bind(this));
+    // this.canvas.nativeElement.addEventListener('mousemove', this.onDrag.bind(this));
     this.canvas.nativeElement.addEventListener('mouseup', this.endDrag.bind(this));
     this.canvas.nativeElement.addEventListener('wheel', this.onMouseWheel.bind(this), { passive: false });
 
