@@ -10,7 +10,11 @@
   }
 
   nav{
-    margin: -8px;
+    margin-top: -8px;
+    img{
+      width: 250px;
+      margin:10px
+    }
   }
   
   canvas {
@@ -26,7 +30,7 @@
     margin-bottom: 20px;
   }
   .background{
-    min-height: 100vh; /* Ensures it fills the full viewport height */
+    min-height: 89vh; /* Ensures it fills the full viewport height */
     background: linear-gradient(90deg, rgba(251,251,251,1) 0%, rgba(207,255,253,1) 48%, rgba(233,251,255,1) 100%);
     background-size: cover;
     background-repeat: no-repeat;

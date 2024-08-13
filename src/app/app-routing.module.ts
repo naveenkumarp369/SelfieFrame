@@ -5,17 +5,17 @@ import { ImageEditorComponent } from './view/image-editor/image-editor.component
 import { ImageEditorAdjustableComponent } from './view/image-editor-adjustable/image-editor-adjustable.component';
 
 const routes: Routes = [
+// {
+//   path:"Editor",
+//   component:ImageEditorComponent,
+// },
 {
-  path:"Editor",
-  component:ImageEditorComponent,
-},
-{
-  path:"e2",
+  path:"selfieFrame",
   component:ImageEditorAdjustableComponent
 },
 {
   path:"**",
-  redirectTo:"/e2",
+  redirectTo:"/selfieFrame",
   pathMatch:"full"
 }
 ];

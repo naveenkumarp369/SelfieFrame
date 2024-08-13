@@ -14,8 +14,8 @@ export class ImageEditorAdjustableComponent {
   private templateImage = new Image();
   private uploadedImage = new Image();
 
-  private imageX = 550;
-  private imageY = 200;
+  private imageX = 545;
+  private imageY = 190;
   private dragging = false;
   private offsetX = 0;
   private offsetY = 0;
@@ -27,7 +27,7 @@ export class ImageEditorAdjustableComponent {
   private moveThreshold = 5; // Reduced threshold for smoother dragging
 
 
-private readonly minScale = 1.3;  
+private readonly minScale = 0;  
 
    isImageUploaded = false;
    displayCanvas="none";
@@ -124,7 +124,7 @@ private readonly minScale = 1.3;
 
   drawImages() {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-    const scaledWidth = 350 * this.imageScale;
+    const scaledWidth = 365 * this.imageScale;
     const scaledHeight = 350 * this.imageScale;
     this.ctx.drawImage(this.uploadedImage, this.imageX, this.imageY, scaledWidth, scaledHeight);
     this.drawTemplate();
@@ -138,7 +138,7 @@ private readonly minScale = 1.3;
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
 
-    const scaledWidth = 350 * this.imageScale;
+    const scaledWidth = 365 * this.imageScale;
     const scaledHeight = 350 * this.imageScale;
 
     if (mouseX >= this.imageX && mouseX <= this.imageX + scaledWidth &&
@@ -259,7 +259,7 @@ private readonly minScale = 1.3;
 
   downloadImage() {
     const link = document.createElement('a');
-    link.download = 'final-image.png';
+    link.download = 'Azconf.png';
     link.href = this.canvas.nativeElement.toDataURL('image/png', 1.0);
     link.click();
   }
