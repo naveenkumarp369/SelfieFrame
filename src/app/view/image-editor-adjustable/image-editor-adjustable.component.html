@@ -1,6 +1,6 @@
-<nav class="navbar bg-body-tertiary" style="position: relative;">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">TechXConf Attending </a>
+<nav class="navbar bg-body-tertiary" >
+    <div class="container-fluid" style="background-color: #101A32;">
+      <img src="assets/logo.png" alt="" srcset="">
     </div>
   </nav>
 
@@ -13,7 +13,7 @@
             <div class="image-container">
                 <!-- <input class="btn btn-primary" type="file" (change)="onFileSelected($event)" accept="image/*" /> -->
                 <!-- <div>&nbsp;</div> -->
-                <div >
+                <div  *ngIf="!isImageUploaded">
                   <div
                     appDragFile
                     class="upload-files"
@@ -23,6 +23,7 @@
                       type="file"
                       #fileInput
                       hidden
+                      accept="image/*" 
                       name="fileUpload"
                       (change)="onFileSelected($event)"
                     />
@@ -63,6 +64,12 @@
 
                 </div>
               </div>
+              
+              <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*" />
+
+              <button class="btn btn-warning" (click)="fileInput.click()" *ngIf="isImageUploaded">Retake Image</button>
+
+
               <button class="btn btn-success" (click)="downloadImage()" *ngIf="isImageUploaded"> Download Image </button>
         </div>
         <div class="col-md-3">    
