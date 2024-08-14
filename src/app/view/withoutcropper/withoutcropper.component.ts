@@ -1,5 +1,4 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NgxCroppedEvent, NgxPhotoEditorService } from 'ngx-photo-editor';
 
 @Component({
   selector: 'app-withoutcropper',
@@ -8,8 +7,6 @@ import { NgxCroppedEvent, NgxPhotoEditorService } from 'ngx-photo-editor';
 })
 export class WithoutcropperComponent {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
-  constructor(private service: NgxPhotoEditorService) {}
-
   private ctx!: CanvasRenderingContext2D;
   private templateImage = new Image();
   private uploadedImage = new Image();
@@ -22,17 +19,16 @@ export class WithoutcropperComponent {
   private imageScale = 1.3;
   private initialDistance = 0;
 
+  private readonly minScale = 1.2;
 
-  private readonly minScale = 1.2;  
+  isImageUploaded = false;
+  displayCanvas = "none";
 
-   isImageUploaded = false;
-   displayCanvas="none";
   ngOnInit() {
-   this.loadcanvas();
+    this.loadCanvas();
   }
 
-  loadcanvas()
-  {
+  loadCanvas() {
     this.templateImage.src = 'assets/selfieFrame.png';
     this.templateImage.onload = () => {
       this.canvas.nativeElement.width = this.templateImage.width;
@@ -52,15 +48,11 @@ export class WithoutcropperComponent {
   }
 
   onFileSelected(event: any) {
- 
-  
-
-
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      this.displayCanvas="block";
-      this.isImageUploaded=true;
+      this.displayCanvas = "block";
+      this.isImageUploaded = true;
       reader.onload = (e: any) => {
         this.uploadedImage.src = e.target.result;
         this.uploadedImage.onload = () => {
@@ -70,9 +62,6 @@ export class WithoutcropperComponent {
       reader.readAsDataURL(file);
     }
   }
- 
-
-  
 
   drawImages() {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
@@ -85,6 +74,7 @@ export class WithoutcropperComponent {
   drawTemplate() {
     this.ctx.drawImage(this.templateImage, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
   }
+
   startDrag(event: MouseEvent) {
     const mouseX = event.offsetX;
     const mouseY = event.offsetY;
@@ -93,7 +83,7 @@ export class WithoutcropperComponent {
     const scaledHeight = 350 * this.imageScale;
 
     if (mouseX >= this.imageX && mouseX <= this.imageX + scaledWidth &&
-        mouseY >= this.imageY && mouseY <= this.imageY + scaledHeight) {
+      mouseY >= this.imageY && mouseY <= this.imageY + scaledHeight) {
       this.dragging = true;
       this.offsetX = mouseX - this.imageX;
       this.offsetY = mouseY - this.imageY;
@@ -126,10 +116,11 @@ export class WithoutcropperComponent {
       const touch = event.touches[0];
       const mouseX = touch.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
       const mouseY = touch.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
-      const scaledWidth = 350 * this.imageScale;
+      const scaledWidth = 365 * this.imageScale;
       const scaledHeight = 350 * this.imageScale;
+
       if (mouseX >= this.imageX && mouseX <= this.imageX + scaledWidth &&
-          mouseY >= this.imageY && mouseY <= this.imageY + scaledHeight) {
+        mouseY >= this.imageY && mouseY <= this.imageY + scaledHeight) {
         this.dragging = true;
         this.offsetX = mouseX - this.imageX;
         this.offsetY = mouseY - this.imageY;
@@ -144,17 +135,17 @@ export class WithoutcropperComponent {
 
   onTouchMove(event: TouchEvent) {
     event.preventDefault();  // Prevent default behavior
-  
+
     if (event.touches.length === 1 && this.dragging) {
       const touch = event.touches[0];
       const mouseX = touch.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
       const mouseY = touch.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
-  
+
       this.imageX = mouseX - this.offsetX;
       this.imageY = mouseY - this.offsetY;
       this.drawImages();
     }
-  
+
     if (event.touches.length === 2) {
       const newDistance = this.getTouchDistance(event.touches);
       const scaleChange = newDistance / this.initialDistance;
@@ -163,7 +154,6 @@ export class WithoutcropperComponent {
       this.drawImages();
     }
   }
-
 
   endTouch() {
     this.dragging = false;
@@ -183,5 +173,4 @@ export class WithoutcropperComponent {
     link.href = this.canvas.nativeElement.toDataURL('image/png', 1.0);
     link.click();
   }
-
 }
