@@ -26,7 +26,6 @@
                       #fileInput
                       hidden
                       accept="image/*" 
-                      capture="environment"
                       name="fileUpload"
                       (change)="onFileSelected($event)"
                     />
@@ -70,7 +69,7 @@
                 </div>
               </div>
               
-              <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*" capture="environment"/>
+              <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*" />
 
               <button class="btn btn-warning" (click)="fileInput.click()" *ngIf="isImageUploaded">Retake Image</button>
 
