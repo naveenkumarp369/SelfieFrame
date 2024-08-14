@@ -6,10 +6,10 @@ import { ImageEditorAdjustableComponent } from './view/image-editor-adjustable/i
 import { WithoutcropperComponent } from './view/withoutcropper/withoutcropper.component';
 
 const routes: Routes = [
-// {
-//   path:"Editor",
-//   component:ImageEditorComponent,
-// },
+{
+  path:"editor",
+  component:ImageEditorComponent,
+},
 {
   path:"selfieFrame",
   component:ImageEditorAdjustableComponent

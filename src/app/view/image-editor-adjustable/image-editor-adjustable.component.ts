@@ -72,9 +72,7 @@ private readonly minScale = 1.2;
         this.uploadedImage.onload = () => {
           this.drawImages();
         };
-
         this.isImageUploaded=true;
-
       };
   
       // Convert base64 to Blob if needed
