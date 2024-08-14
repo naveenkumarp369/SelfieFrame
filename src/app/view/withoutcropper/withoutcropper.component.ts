@@ -20,13 +20,12 @@ export class WithoutcropperComponent {
   private scale = 1;
   private dx = 0;
   private dy = 0;
-  // private canvasRect = this.canvas.nativeElement.getBoundingClientRect();
   isImageUploaded = false;
-  displayCanvas="none";
+  displayCanvas = "none";
+
   ngOnInit() {
     this.templateImage.src = 'assets/selfieFrame.png';
     this.templateImage.onload = () => {
-      // Set canvas size to match the template image size
       this.canvas.nativeElement.width = this.templateImage.width;
       this.canvas.nativeElement.height = this.templateImage.height;
       this.ctx = this.canvas.nativeElement.getContext('2d')!;
@@ -36,7 +35,7 @@ export class WithoutcropperComponent {
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent) {
-    if (event.button === 0) { // Left mouse button
+    if (event.button === 0 && this.isCanvasClick(event)) { // Left mouse button and click on canvas
       this.isDragging = true;
       this.startX = event.clientX - this.dx;
       this.startY = event.clientY - this.dy;
@@ -75,17 +74,19 @@ export class WithoutcropperComponent {
 
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
-    if (event.touches.length === 1) {
-      // Single finger touch (dragging)
-      this.isDragging = true;
-      this.startX = event.touches[0].clientX - this.dx;
-      this.startY = event.touches[0].clientY - this.dy;
-    } else if (event.touches.length === 2) {
-      // Two finger touch (resizing)
-      this.isResizing = true;
-      this.lastTouchDistance = this.getDistance(event.touches[0], event.touches[1]);
+    if (event.target === this.canvas.nativeElement) {
+      if (event.touches.length === 1) {
+        // Single finger touch (dragging)
+        this.isDragging = true;
+        this.startX = event.touches[0].clientX - this.dx;
+        this.startY = event.touches[0].clientY - this.dy;
+      } else if (event.touches.length === 2) {
+        // Two finger touch (resizing)
+        this.isResizing = true;
+        this.lastTouchDistance = this.getDistance(event.touches[0], event.touches[1]);
+      }
+      event.preventDefault(); // Prevent default scrolling behavior on mobile
     }
-    event.preventDefault(); // Prevent default scrolling behavior on mobile
   }
 
   @HostListener('touchmove', ['$event'])
@@ -119,44 +120,45 @@ export class WithoutcropperComponent {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
+  private isCanvasClick(event: MouseEvent): boolean {
+    const rect = this.canvas.nativeElement.getBoundingClientRect();
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    );
+  }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.displayCanvas="block";
-
+        this.displayCanvas = "block";
         this.uploadedImage.src = e.target.result;
         this.uploadedImage.onload = () => {
           this.drawImages();
         };
-        this.isImageUploaded=true;
-
+        this.isImageUploaded = true;
       };
       reader.readAsDataURL(file);
     }
   }
 
   drawTemplate() {
-    // Draw template image on canvas
     this.ctx.drawImage(this.templateImage, 0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
   }
 
   drawImages() {
-    // Clear canvas
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
-   
-    // Draw uploaded image with transformations
     this.ctx.save();
     this.ctx.translate(this.canvas.nativeElement.width / 2 + this.dx, this.canvas.nativeElement.height / 2 + this.dy);
     this.ctx.scale(this.scale, this.scale);
     this.ctx.drawImage(this.uploadedImage, -this.uploadedImage.width / 2, -this.uploadedImage.height / 2);
     this.ctx.restore();
+    this.drawTemplate();
 
-
-
-     // Draw template
-     this.drawTemplate();
   }
 
   downloadImage() {
