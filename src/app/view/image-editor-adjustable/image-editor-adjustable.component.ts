@@ -38,7 +38,7 @@ private readonly minScale = 1.2;
 
   loadcanvas()
   {
-    this.templateImage.src = 'assets/board2.png';
+    this.templateImage.src = 'assets/selfieFrame.png';
     this.templateImage.onload = () => {
       this.canvas.nativeElement.width = this.templateImage.width;
       this.canvas.nativeElement.height = this.templateImage.height;

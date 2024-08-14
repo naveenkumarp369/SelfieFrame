@@ -1,0 +1,84 @@
+<nav class="navbar bg-body-tertiary" >
+    <div class="container-fluid" style="background-color: #101A32;">
+      <img src="assets/logo.png" alt="" srcset="">
+    </div>
+  </nav>
+
+  <div class="container-fluid background">
+
+    <div class="row">
+      <div class="col-md-3">    
+
+        
+      </div>
+        <div class="col-md-6">
+            <div class="image-container">
+                <!-- <input class="btn btn-primary" type="file" (change)="onFileSelected($event)" accept="image/*" /> -->
+                <!-- <div>&nbsp;</div> -->
+                <div  *ngIf="!isImageUploaded">
+                  <div
+                    appDragFile
+                    class="upload-files"
+                  >
+                    <input
+                      id="file-upload"
+                      type="file"
+                      #fileInput
+                      hidden
+                      accept="image/*" 
+                      capture="environment"
+                      name="fileUpload"
+                      (change)="onFileSelected($event)"
+                    />
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="pdf-img"></div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="file-upload" id="file-drag">
+                          <div id="start">
+                            <!-- <span id="file-upload-btn" class="browse-file">
+                                  <div class="pdf-img "></div>
+                                  UPLOAD YOUR FILES</span> -->
+                            <div class="drag-file">
+                              <span class="span-weight-top">
+                               Upload Image 
+                              </span>
+                              <span class="browse-span">
+                                <p class="span-text">&</p>
+                                &nbsp;
+                                <p class="browse-file span-weight-bottom">
+                                  Get Your SelfieFrame
+                                </p></span
+                              >
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>&nbsp;</div>
+
+                <div       [ngStyle]="{ display: displayCanvas }"
+                >
+
+                <!-- <h2> Thanks For Attending </h2> -->
+                  <canvas #canvas ></canvas>
+
+                </div>
+              </div>
+              
+              <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*" capture="environment"/>
+
+              <button class="btn btn-warning" (click)="fileInput.click()" *ngIf="isImageUploaded">Retake Image</button>
+
+
+              <button class="btn btn-success" (click)="downloadImage()" *ngIf="isImageUploaded"> Download Image </button>
+        </div>
+        <div class="col-md-3">    
+        </div>
+
+    </div>
+  </div>
